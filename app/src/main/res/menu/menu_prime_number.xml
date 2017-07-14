@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.ndandey.android.primenumber.activities.PrimeNumberActivity">
+    <item android:id="@+id/menu_search"
+          android:icon="@mipmap/ic_action_search"
+          android:title="@string/str_search"
+          app:actionLayout="@layout/layout_search"
+          app:showAsAction="always|collapseActionView" />
+</menu>
