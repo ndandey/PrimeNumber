@@ -7,4 +7,5 @@
           android:title="@string/str_search"
           app:actionLayout="@layout/layout_search"
           app:showAsAction="always|collapseActionView" />
+
 </menu>

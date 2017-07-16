@@ -24,10 +24,6 @@ import android.widget.LinearLayout;
 public class PrimeNumberActivity extends AppCompatActivity
 {
 
-    private MenuItem mSearchItem;
-    private String mSearchTxt = null;
-    private Boolean bSearchItemCollapsed = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -40,28 +36,14 @@ public class PrimeNumberActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        final Context vContext = this;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_prime_number, menu);
         // ....Set Search Control.
-        mSearchItem = menu.findItem(R.id.menu_search);
-        setSearchtext(mSearchItem, this);
+        MenuItem mSearchItem = menu.findItem(R.id.menu_search);
+        setSearchtext(mSearchItem, vContext);
+
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        // int id = item.getItemId();
-
-        // noinspection SimplifiableIfStatement
-        // if (id == R.id.action_settings) {
-        // return true;
-        // }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void setSearchtext(MenuItem searchItem, final Context pContext)
@@ -90,16 +72,10 @@ public class PrimeNumberActivity extends AppCompatActivity
                         if (!GenericUtility.isStringBlank(query))
                         {
                             GenericUtility.showHideProgress(Boolean.TRUE, pContext);
-                            mSearchTxt = query; // ....Set search Text.
                             PrimeNumberController vPrimeNumberController = new PrimeNumberController(pContext);
                             vPrimeNumberController.getPrimeNumber(query, new PrimeNumberHandler());
                         }
-                        else if (GenericUtility.isStringBlank(query))
-                        {
-                            mSearchTxt = null; // ....set search text as null.
-                            bSearchItemCollapsed = true; // ....Set Collapsed
-                                                         // flag = true;
-                        }
+
                         vEditText.clearFocus();
                         // ....Hide SoftKey Input.
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -115,21 +91,6 @@ public class PrimeNumberActivity extends AppCompatActivity
                 return false;
             }
         });
-    }
-
-    private void hideKeyboard()
-    {
-        if (mSearchItem != null)
-        {
-            LinearLayout vLlayout = (LinearLayout) mSearchItem.getActionView();
-            EditText vEditText = (EditText) vLlayout.findViewById(R.id.etSearch);
-
-            vEditText.clearFocus();
-
-            // ....Hide soft input.
-            InputMethodManager vImm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            vImm.hideSoftInputFromWindow(vEditText.getWindowToken(), 0);
-        }
     }
 
     private class PrimeNumberHandler extends Handler

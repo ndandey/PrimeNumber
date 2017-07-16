@@ -49,7 +49,7 @@ public class PrimeNumberController
         mDBHelper = getDBInstance(mContext);
     }
 
-    public static void getPrimeNumber(final String pPrimeIndex, final Handler pHandler)
+    public void getPrimeNumber(final String pPrimeIndex, final Handler pHandler)
     {
         new AsyncTask<String, Void, String>()
         {
@@ -84,7 +84,7 @@ public class PrimeNumberController
      * @param pPrimeIndex
      * @return
      */
-    public static String getPrimeNumber(String pPrimeIndex)
+    public String getPrimeNumber(String pPrimeIndex)
     {
         Integer vPrimeIndex = Integer.valueOf(pPrimeIndex);
         String vPrimeNumber = mDBHelper.getPrimeNumber(vPrimeIndex);

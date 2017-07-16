@@ -12,9 +12,7 @@ import com.ndandey.android.primenumber.controllers.PrimeNumberEventHandler;
 import com.ndandey.android.primenumber.utils.GenericUtility;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,16 +26,11 @@ import android.view.ViewGroup;
  */
 public class PrimeNumberListFragment extends Fragment implements PrimeNumberEventHandler
 {
-
-    private static final String LIST_STATE_KEY = "LIST_STATE_KEY";
-    Context mContext;
+    private Context mContext;
     private RecyclerView recyclerView;
     private PrimeNumberListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private PrimeNumberController mPrimeNumberController;
-    private Parcelable mListState;
-    // Store a member variable for the listener
-    private EndlessRecyclerViewScrollListener mScrollListener;
 
     public PrimeNumberListFragment()
     {
@@ -47,14 +40,14 @@ public class PrimeNumberListFragment extends Fragment implements PrimeNumberEven
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // setRetainInstance(Boolean.TRUE);
+        setRetainInstance(Boolean.TRUE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View vReturnView = inflater.inflate(R.layout.fragment_prime_number, container, false);
         mContext = getActivity();
+        View vReturnView = inflater.inflate(R.layout.fragment_prime_number, container, false);
         if (mPrimeNumberController == null)
         {
             mPrimeNumberController = new PrimeNumberController(1, 100, mContext);
@@ -62,43 +55,24 @@ public class PrimeNumberListFragment extends Fragment implements PrimeNumberEven
             mPrimeNumberController.mPrimeNumberEventHandler = this;
         }
         recyclerView = (RecyclerView) vReturnView.findViewById(R.id.my_recycler_view);
-        // use this setting to
-        // improve performance if you know that changes
-        // in content do not change the layout size
-        // of the RecyclerView
         recyclerView.setHasFixedSize(true);
-        // use a linear layout manager
-        if (mLayoutManager == null)
+        mLayoutManager = new GridLayoutManager(mContext, GenericUtility.calculateNoOfColumns(mContext, 80));
+        recyclerView.setLayoutManager(mLayoutManager);
+        if (mAdapter != null)
         {
-            mLayoutManager = new GridLayoutManager(mContext, GenericUtility.calculateNoOfColumns(mContext, 95));
-            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(mAdapter);
         }
-
-        // recyclerView.addItemDecoration(new DividerItemDecoration(mContext,
-        // DividerItemDecoration.HORIZONTAL));
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((GridLayoutManager) mLayoutManager)
         {
-
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view)
             {
-
                 GenericUtility.showHideProgress(Boolean.TRUE, mContext);
                 // get next batch of Prime Numbers
                 mPrimeNumberController.getNextPrimeNumbers();
             }
         });
-        if (mAdapter != null)
-        {
-            recyclerView.setAdapter(mAdapter);
-        }
         return vReturnView;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
